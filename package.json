@@ -1,0 +1,25 @@
+{
+  "name": "photo-gallery",
+  "version": "1.0.0",
+  "description": "api and client code for a photo gallery",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "(cd api && npm install); (cd client && npm install);",
+    "start": "concurrently \"npm run api\" \"npm run client\"",
+    "api": "cd api && npm start",
+    "client": "cd client && npm start",
+    "test": "(cd api && npm test); (cd client && npm test npm test -- --watchAll=false);"
+  },
+  "author": "Jenny",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "concurrently": "^5.1.0",
+    "cz-conventional-changelog": "^3.1.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
