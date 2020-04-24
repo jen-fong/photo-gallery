@@ -4,6 +4,7 @@ import qs from "qs";
 import { useLocation, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setFilters, clearPhotos, fetchPhotos } from "../../actions/gallery";
+import { getWidth, getHeight, getIsGrayscale } from "../../selectors/gallery";
 import "./Filters.css";
 
 function getOptions(options) {
@@ -28,9 +29,9 @@ export function Filters() {
   const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
-  const height = useSelector((state) => state.gallery.filters.height);
-  const width = useSelector((state) => state.gallery.filters.width);
-  const isGrayscale = useSelector((state) => state.gallery.filters.grayscale);
+  const height = useSelector(getHeight);
+  const width = useSelector(getWidth);
+  const isGrayscale = useSelector(getIsGrayscale);
 
   const selectedHeightOption = createValueOption(height);
   const selectedWidthOption = createValueOption(width);

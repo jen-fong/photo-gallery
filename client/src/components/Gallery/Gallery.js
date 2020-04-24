@@ -5,16 +5,23 @@ import { useSelector, useDispatch } from "react-redux";
 import qs from "qs";
 import Spinner from "react-svg-spinner";
 import { fetchPhotos, setPage } from "../../actions/gallery";
+import {
+  getError,
+  getTotalPages,
+  getIsLoading,
+  getPage,
+  getPhotos,
+} from "../../selectors/gallery";
 import { PhotosRow } from "./PhotosRow";
 import "./Gallery.css";
 
 export function Gallery() {
   const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.gallery.isLoading);
-  const error = useSelector((state) => state.gallery.error);
-  const photos = useSelector((state) => state.gallery.data);
-  const page = useSelector((state) => state.gallery.page);
-  const totalPages = useSelector((state) => state.gallery.totalPages);
+  const isLoading = useSelector(getIsLoading);
+  const error = useSelector(getError);
+  const photos = useSelector(getPhotos);
+  const page = useSelector(getPage);
+  const totalPages = useSelector(getTotalPages);
   const hasMore = page < totalPages;
 
   const photosPerRow = 3;
@@ -47,6 +54,8 @@ export function Gallery() {
     );
   }, [dispatch, page, grayscaleValToBool, heightValInQuery, widthValInQuery]);
 
+  // only display on page 1 since we do not want to wipe out previous
+  // images when fetching for infinite scroll
   if (isLoading && page === 1) {
     return <Spinner />;
   }
@@ -59,6 +68,7 @@ export function Gallery() {
 
   return (
     <div className="gallery-container">
+      {!photos.length && <section>No results found</section>}
       <section>
         <InfiniteScroll
           className="gallery-section"
