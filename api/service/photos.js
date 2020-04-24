@@ -5,10 +5,9 @@ const path = require("path");
 // read the photo urls from the downloaded file from pastebin
 async function readDataFromFile(filename) {
   const file = await fs.readFile(
-    path.join(__dirname, "..", `data/${filename}`),
+    path.join(__dirname, "../", `data/${filename}`),
     "utf8"
   );
-
   return file.toString().split("\r\n");
 }
 
@@ -47,8 +46,8 @@ function toPhotoObject(photoUrl) {
   };
 }
 
-function fetchPhotos({ grayscale, height, width, page }) {
-  const photoUrls = readDataFromFile("photoUrls.txt");
+async function fetchPhotos({ grayscale, height, width, page }) {
+  const photoUrls = await readDataFromFile("photoUrls.txt");
   const defaultCountPerPage = 20;
   let results = photoUrls.map(toPhotoObject);
 

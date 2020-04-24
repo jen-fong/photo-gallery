@@ -11,9 +11,10 @@ app.use("/api/photos", photoRoutes);
 
 // TODO fix error
 app.use(function (err, req, res, next) {
-  res.status(400).json({
-    error: err,
-  });
+  console.log("hit");
+  // res.status(400).json({
+  //   error: err,
+  // });
   // if (err.response) {
   //   res.status(400).json(err.response.data);
   // }
