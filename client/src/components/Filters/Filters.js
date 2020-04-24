@@ -25,7 +25,7 @@ function createValueOption(value) {
   return value ? { value, label: value } : "";
 }
 
-export function Filters() {
+export function Filters({ widthQuery, heightQuery, grayscaleQuery }) {
   const location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -57,17 +57,17 @@ export function Filters() {
 
     const newQueryString = qs.stringify(withoutUnspecifiedFilters);
 
-    // clear photos separately to handle the infinite scroll needing to append
-    // to the photos array
-    dispatch(clearPhotos());
-    dispatch(
-      fetchPhotos({
-        page: 1,
-        grayscale: isGrayscale,
-        height,
-        width,
-      })
-    );
+    const isSameQuery =
+      grayscaleQuery === isGrayscale &&
+      height === heightQuery &&
+      widthQuery === width;
+
+    if (!isSameQuery) {
+      // clear photos separately to handle the infinite scroll needing to append
+      // to the photos array
+      dispatch(clearPhotos());
+    }
+
     history.push({
       pathname: location.pathname,
       search: "?" + newQueryString,

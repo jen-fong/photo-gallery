@@ -7,10 +7,11 @@ import * as galleryActions from "../../../actions/gallery";
 import { Filters } from "../Filters";
 
 describe("Filters", () => {
-  let store, filtersState;
+  let store, filtersState, history;
   beforeEach(() => {
+    history = createMemoryHistory();
     galleryActions.setFilters = jest.fn();
-    galleryActions.fetchPhotos = jest.fn();
+    galleryActions.clearPhotos = jest.fn();
 
     filtersState = {
       height: null,
@@ -28,13 +29,11 @@ describe("Filters", () => {
     };
   });
 
-  const renderWithStoreAndRouter = () => {
-    const history = createMemoryHistory();
-
+  const renderWithStoreAndRouter = (props) => {
     return render(
       <Provider store={store}>
         <Router history={history}>
-          <Filters />
+          <Filters {...props} />
         </Router>
       </Provider>
     );
@@ -71,22 +70,50 @@ describe("Filters", () => {
     expect(galleryActions.setFilters).toHaveBeenCalledWith({ grayscale: true });
   });
 
-  it("submits form with filters", () => {
+  it("submits form with filters when filters change", () => {
     filtersState = {
       page: 2,
       height: "100",
       width: "250",
       grayscale: true,
     };
+    const prevFilters = {
+      heightQuery: "400",
+      widthQuery: null,
+      grayscaleQuery: true,
+    };
+    jest.spyOn(history, "push");
 
-    const { getByText } = renderWithStoreAndRouter();
+    const { getByText } = renderWithStoreAndRouter(prevFilters);
     const submitButton = getByText("Submit");
     fireEvent.click(submitButton);
 
     expect(store.dispatch).toHaveBeenCalled();
-    expect(galleryActions.fetchPhotos).toHaveBeenCalledWith({
-      ...filtersState,
-      page: 1,
+    expect(galleryActions.clearPhotos).toHaveBeenCalledWith();
+    expect(history.push).toHaveBeenCalledWith({
+      pathname: "/",
+      search: "?height=100&width=250&grayscale=true",
     });
+  });
+
+  it("does not submit form when filters haven't changed", () => {
+    filtersState = {
+      page: 2,
+      height: "100",
+      width: "250",
+      grayscale: true,
+    };
+    const prevFilters = {
+      heightQuery: filtersState.height,
+      widthQuery: filtersState.width,
+      grayscaleQuery: filtersState.grayscale,
+    };
+
+    const { getByText } = renderWithStoreAndRouter(prevFilters);
+    const submitButton = getByText("Submit");
+    fireEvent.click(submitButton);
+
+    expect(store.dispatch).not.toHaveBeenCalled();
+    expect(galleryActions.clearPhotos).not.toHaveBeenCalledWith();
   });
 });

@@ -13,7 +13,6 @@ function App() {
 
       <Switch>
         <Route path="/">
-          <Filters />
           <Gallery />
         </Route>
       </Switch>

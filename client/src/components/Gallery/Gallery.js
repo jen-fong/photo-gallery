@@ -12,6 +12,7 @@ import {
   getPage,
   getPhotos,
 } from "../../selectors/gallery";
+import { Filters } from "../Filters";
 import { PhotosRow } from "./PhotosRow";
 import "./Gallery.css";
 
@@ -68,6 +69,11 @@ export function Gallery() {
 
   return (
     <div className="gallery-container">
+      <Filters
+        heightQuery={heightValInQuery}
+        widthQuery={widthValInQuery}
+        grayscaleQuery={grayscaleValToBool}
+      />
       {!photos.length && <section>No results found</section>}
       <section>
         <InfiniteScroll
