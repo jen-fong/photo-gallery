@@ -9,7 +9,7 @@ This will install dependencies in both client and api folders and start both ser
 
 #### Windows
 
-If you are using windows, you will have to go into both folders separately and install packages there due to the postinstall script creating subshells.
+If you are using windows, you will have to go into both folders separately and install packages there due to the postinstall script creating subshells. You can still run `npm start` in the main directory to run both servers in one terminal.
 
 ### Tests
 
@@ -42,7 +42,7 @@ While I didn't do it in this assignment, it would be a better idea save the imag
 
 ### Features and Design
 
-For the frontend, I chose to model it after instagram's photo grid. I think columns and rows are easier to look at and infinite scrolling over pages makes sense for a gallery since users are usually just leisurely browsing. Due to the size differences of the images, I had to create a square with a background color to make it more even.
+For the frontend, I chose to model it after instagram's photo grid. I think columns and rows are easier to look at compared to masonry and infinite scrolling over pages makes sense for a gallery since users are usually just leisurely browsing. Due to the size differences of the images, I had to create a square with a background color to make it more even.
 
 1. Images are in a responsive grid done using flexbox and a couple of media queries
 2. Gallery is paginated using infinite scroll
