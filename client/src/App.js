@@ -1,6 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import { Gallery } from "./components/Gallery";
+import { Filters } from "./components/Filters";
 import "./App.css";
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
 
       <Switch>
         <Route path="/">
+          <Filters />
           <Gallery />
         </Route>
       </Switch>

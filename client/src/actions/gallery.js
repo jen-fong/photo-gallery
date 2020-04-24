@@ -5,6 +5,8 @@ import {
   FETCH_PHOTOS_PENDING,
   FETCH_PHOTOS_SUCCESS,
   SET_PAGE,
+  SET_FILTERS,
+  CLEAR_PHOTOS,
 } from "../constants";
 
 export const setPage = (page) => {
@@ -14,20 +16,35 @@ export const setPage = (page) => {
   };
 };
 
+export const setFilters = (filters) => {
+  return {
+    type: SET_FILTERS,
+    meta: { filters },
+  };
+};
+
+export const clearPhotos = () => {
+  return {
+    type: CLEAR_PHOTOS,
+  };
+};
+
 export const fetchPhotos = (photoParams) => async (dispatch) => {
   const params = { ...defaultFetchParams, ...photoParams };
   const url = `${baseURL}/photos`;
+
+  dispatch(setFilters(photoParams));
 
   dispatch({
     type: FETCH_PHOTOS_PENDING,
   });
 
   try {
-    const moviesResponse = await axios.get(url, { params });
+    const photosResponse = await axios.get(url, { params });
 
     dispatch({
       type: FETCH_PHOTOS_SUCCESS,
-      payload: moviesResponse.data,
+      payload: photosResponse.data,
     });
   } catch (err) {
     dispatch({

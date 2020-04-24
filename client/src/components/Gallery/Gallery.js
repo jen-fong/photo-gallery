@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import qs from "qs";
 import Spinner from "react-svg-spinner";
 import { fetchPhotos, setPage } from "../../actions/gallery";
 import { PhotosRow } from "./PhotosRow";
@@ -24,21 +26,35 @@ export function Gallery() {
     dispatch(setPage(nextPage));
   };
 
+  const location = useLocation();
+  const currentRouteQueries = qs.parse(location.search, {
+    ignoreQueryPrefix: true, // search contains a leading ? in the query
+  });
+  const grayscaleValInQuery = currentRouteQueries.grayscale;
+  const heightValInQuery = currentRouteQueries.height || null;
+  const widthValInQuery = currentRouteQueries.width || null;
+  const grayscaleValToBool =
+    grayscaleValInQuery === "true" || grayscaleValInQuery === "";
+
   useEffect(() => {
     dispatch(
       fetchPhotos({
         page,
+        grayscale: grayscaleValToBool,
+        height: heightValInQuery,
+        width: widthValInQuery,
       })
     );
-  }, [dispatch, page]);
+  }, [dispatch, page, grayscaleValToBool, heightValInQuery, widthValInQuery]);
 
   if (isLoading && page === 1) {
     return <Spinner />;
   }
 
-  // TODO make component
+  // this should be a separate reuseable component but it will work for
+  // this app for now
   if (error) {
-    return <div>{error}</div>;
+    return <div className="error">{error}</div>;
   }
 
   return (

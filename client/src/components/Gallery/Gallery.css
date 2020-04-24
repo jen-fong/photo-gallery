@@ -5,6 +5,10 @@
   display: flex;
   flex-direction: column;
 }
+.error {
+  text-align: center;
+  font-size: 2rem;
+}
 .gallery-row {
   display: flex;
   flex-direction: row;
@@ -14,13 +18,13 @@
 .gallery-row:last-child {
   justify-content: space-evenly;
 }
-
 .gallery-photo {
   background-color: #f2f2f2;
   margin: 1rem 1rem;
   width: 33%;
   max-width: 18rem;
   height: auto;
+  overflow: hidden;
 }
 .gallery-photo:before {
   padding-top: 100%;
@@ -35,8 +39,13 @@
 }
 .gallery-photo > img {
   height: 100%;
-  width: 100%;
+  max-width: 100%;
   object-fit: scale-down;
+  transform: scale(1);
+  transition: all 0.3s;
+}
+.gallery-photo > img:hover {
+  transform: scale(1.2);
 }
 
 @media all and (max-width: 735px) {

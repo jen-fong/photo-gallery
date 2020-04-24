@@ -3,6 +3,8 @@ import {
   FETCH_PHOTOS_PENDING,
   FETCH_PHOTOS_SUCCESS,
   SET_PAGE,
+  SET_FILTERS,
+  CLEAR_PHOTOS,
 } from "../constants";
 
 export const initialState = {
@@ -25,6 +27,23 @@ export function galleryReducer(state = initialState, action) {
       return {
         ...state,
         page: action.meta.page,
+      };
+    case SET_FILTERS:
+      const updatedFilters = { ...action.meta.filters };
+      delete updatedFilters.page;
+      const withUpdatedFilters = {
+        ...state.filters,
+        ...updatedFilters,
+      };
+      return {
+        ...state,
+        filters: withUpdatedFilters,
+      };
+    case CLEAR_PHOTOS:
+      return {
+        ...state,
+        data: [],
+        page: 1,
       };
     case FETCH_PHOTOS_PENDING:
       return {
