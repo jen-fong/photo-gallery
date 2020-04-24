@@ -21,18 +21,19 @@ function filterByHeightAndWidth(photos, width, height) {
       let dimensionsMatch = true;
 
       if (height && !heightMatches) {
-        return null;
+        return false;
       }
       if (width && !widthMatches) {
-        return null;
+        return false;
       }
       return photo;
     })
     .filter((photo) => !!photo);
 }
 
-// breaks a photo url to its parts (id, height, width) to extract out its data
-// so it is easier to consume
+// Breaks a photo url to its parts (id, height, width) to extract out its data
+// so it is easier to consume. The object can be extended with other various data
+// if necessary
 function toPhotoObject(photoUrl) {
   const path = url.parse(photoUrl).pathname.split("/");
   const id = parseInt(path[2]);
@@ -48,13 +49,13 @@ function toPhotoObject(photoUrl) {
 
 async function fetchPhotos({ grayscale, height, width, page }) {
   const photoUrls = await readDataFromFile("photoUrls.txt");
-  const defaultCountPerPage = 20;
   let results = photoUrls.map(toPhotoObject);
 
   if (height || width) {
     results = filterByHeightAndWidth(results, width, height);
   }
 
+  const defaultCountPerPage = 20;
   const count = results.length;
   const totalPages = Math.ceil(count / defaultCountPerPage);
   // handle paging by slicing parts of the array to imitate pagination
